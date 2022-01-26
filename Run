@@ -1,0 +1,81 @@
+import pygame
+import os
+
+class Player():
+    def __init__(self):
+        player_walk1 = pygame.image.load(os.path.join('materials', 'walk01.png')).convert_alpha()
+        player_walk2 = pygame.image.load(os.path.join('materials', 'walk02.png')).convert_alpha()
+        player_walk3 = pygame.image.load(os.path.join('materials', 'walk03.png')).convert_alpha()
+        player_walk4 = pygame.image.load(os.path.join('materials', 'walk04.png')).convert_alpha()
+        player_walk5 = pygame.image.load(os.path.join('materials', 'walk05.png')).convert_alpha()
+        player_walk6 = pygame.image.load(os.path.join('materials', 'walk06.png')).convert_alpha()
+        player_walk7 = pygame.image.load(os.path.join('materials', 'walk07.png')).convert_alpha()
+        player_walk8 = pygame.image.load(os.path.join('materials', 'walk08.png')).convert_alpha()
+        player_walk9 = pygame.image.load(os.path.join('materials', 'walk09.png')).convert_alpha()
+        player_walk10 = pygame.image.load(os.path.join('materials', 'walk10.png')).convert_alpha()
+        player_walk11 = pygame.image.load(os.path.join('materials', 'walk11.png')).convert_alpha()
+        self.player_walk = [player_walk1, player_walk2, player_walk3, player_walk4, player_walk5, player_walk6,
+                            player_walk7, player_walk8, player_walk9, player_walk10, player_walk11]
+        self.player_index = 0
+        self.player_jump = pygame.image.load(os.path.join('materials', 'jump.png')).convert_alpha()
+
+        self.image = self.player_walk[self.player_index]
+
+
+pygame.init()
+
+WIDTH, HEIGHT = 800, 400
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("My Game")
+
+WHITE = (255, 255, 255)
+
+FPS = 60
+VEL = 4
+[PLAYER_HEIGHT, PLAYER_WIDTH] = 66, 92
+
+PLAYER_PIC = pygame.image.load(os.path.join('materials', 'stand.png'))
+PLAYER = pygame.transform.scale(PLAYER_PIC, (PLAYER_HEIGHT, PLAYER_WIDTH))
+SKY = pygame.image.load(os.path.join('materials', 'Sky.png'))
+GROUND = pygame.image.load(os.path.join('materials', 'ground.png'))
+TEXT_FONT = pygame.font.Font(os.path.join('font', 'Pixeltype.ttf'), 50)
+SCORE_TEXT = TEXT_FONT.render('Score:', False, 'Black')
+
+MAX_HEALTH = 1000
+
+
+def draw_window(st):
+    WIN.blit(SKY, (0, 0))
+    WIN.blit(GROUND, (0, 300))
+    WIN.blit(SCORE_TEXT, (0, 0))
+    WIN.blit(PLAYER, (st.x, st.y))
+    pygame.display.update()
+
+
+def main():
+    st = pygame.Rect(0, 210, PLAYER_WIDTH, PLAYER_HEIGHT)
+    run = True
+    clock = pygame.time.Clock()
+    current_health = 200
+    health_ratio = MAX_HEALTH/current_health
+
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_a] and st.x - VEL > 0:
+            st.x -= VEL
+        if keys_pressed[pygame.K_s] and st.y + VEL + st.height < HEIGHT - 120:
+            st.y += VEL
+        if keys_pressed[pygame.K_d] and WIDTH - st.x > st.width - 15:
+            st.x += VEL
+        if keys_pressed[pygame.K_w] and st.y - VEL > 0:
+            st.y -= VEL
+        draw_window(st)
+
+
+if __name__ == "__main__":
+    main()
